@@ -1,7 +1,6 @@
 #pragma once
 
 #include "KeccakTree.h"
-#include "KeccakTypes.h"
 
 //************************
 // First Tree mode
@@ -9,8 +8,8 @@
 // output chaining values hashes are copied to h_outBuffer
 //************************
 
-void KeccakTreeGPU(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
-    tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer);
+void KeccakTreeGPU(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer);
 
 
 // Overlap CPU computation of previous results with computation of present data
@@ -18,30 +17,29 @@ void KeccakTreeGPU(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
 // data to be hashed h_outBuffer contains previsous results at the call of the
 // function, and present results when the function returns
 
-void KeccakTreeGPU_overlapCPU(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
-    tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer, tKeccakLane* Kstate);
+void KeccakTreeGPU_overlapCPU(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer, unsigned* Kstate);
 
-void KeccakTreeGPU_Split(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
-    tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer);
+void KeccakTreeGPU_Split(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer);
 
-void KeccakTreeGPU_Stream(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
-    tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer);
+void KeccakTreeGPU_Stream(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer);
 
-void KeccakTreeGPU_Stream_OverlapCPU(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer,
-    tKeccakLane* Kstate);
+void KeccakTreeGPU_Stream_OverlapCPU(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer, unsigned* Kstate);
 
 //********************
 // 2nd stage Tree mode
 //********************
-void KeccakTreeGPU_2stg(tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer,
-    tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer);
+void KeccakTreeGPU_2stg(unsigned* h_inBuffer, unsigned* d_inBuffer,
+    unsigned* h_outBuffer, unsigned* d_outBuffer);
 
 
 // Streams and overlap CPU
-void KeccakTreeGPU_2stg_Stream_OverlapCPU(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer,
-    tKeccakLane* Kstate);
+void KeccakTreeGPU_2stg_Stream_OverlapCPU(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer,
+    unsigned* Kstate);
 
 
 //******************
@@ -51,9 +49,8 @@ void KeccakTreeGPU_2stg_Stream_OverlapCPU(tKeccakLane* h_inBuffer,
 //
 // output streams are copied in h_outBuffer
 
-void KeccakSCipherGPU_Stream(tKeccakLane* h_inKeyNonce,
-    tKeccakLane* d_inKeyNonce, tKeccakLane* h_outBuffer,
-    tKeccakLane* d_outBuffer);
+void KeccakSCipherGPU_Stream(unsigned* h_inKeyNonce, unsigned* d_inKeyNonce,
+    unsigned* h_outBuffer, unsigned* d_outBuffer);
 
 
 // error function

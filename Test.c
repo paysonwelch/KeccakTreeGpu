@@ -16,7 +16,7 @@
 #include "Test.h"
 
 // debug print function
-void print_out(tKeccakLane* h_outBuffer, int nb_threads)
+void print_out(unsigned* h_outBuffer, int nb_threads)
 {
     printf("%08x ", h_outBuffer[0]);
     printf("%08x ", h_outBuffer[1]);
@@ -45,19 +45,19 @@ void TestCPU(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer
-    h_outBuffer = (tKeccakLane*)malloc(TOTAL_OUTPUT_SIZE);
+    h_outBuffer = (unsigned*)malloc(TOTAL_OUTPUT_SIZE);
     memset(h_outBuffer, 0, TOTAL_OUTPUT_SIZE);
 
     //***************************
@@ -99,22 +99,22 @@ void TestGPU(unsigned imax)
     struct timespec t1, t2;
     unsigned int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer
-    h_outBuffer = (tKeccakLane*)malloc(TOTAL_OUTPUT_SIZE);
+    h_outBuffer = (unsigned*)malloc(TOTAL_OUTPUT_SIZE);
     memset(h_outBuffer, 0, TOTAL_OUTPUT_SIZE);
 
     // init device inBuffer
@@ -172,22 +172,22 @@ void TestGPU_OverlapCPU(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer
-    h_outBuffer = (tKeccakLane*)malloc(TOTAL_OUTPUT_SIZE);
+    h_outBuffer = (unsigned*)malloc(TOTAL_OUTPUT_SIZE);
     memset(h_outBuffer, 0, TOTAL_OUTPUT_SIZE);
 
     // init device inBuffer
@@ -256,22 +256,22 @@ void TestGPU_Split(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer
-    h_outBuffer = (tKeccakLane*)malloc(TOTAL_OUTPUT_SIZE);
+    h_outBuffer = (unsigned*)malloc(TOTAL_OUTPUT_SIZE);
     memset(h_outBuffer, 0, TOTAL_OUTPUT_SIZE);
 
     // init device inBuffer
@@ -327,14 +327,14 @@ void TestGPU_Stream(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer = NULL;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer = NULL;  // Host out buffer
+    unsigned* h_inBuffer = NULL;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer = NULL;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // alloc host inBuffer WITH CudaHostAlloc
@@ -405,14 +405,14 @@ void TestGPU_Stream_OverlapCPU(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer = NULL;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer = NULL;  // Host out buffer
+    unsigned* h_inBuffer = NULL;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer = NULL;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // alloc host inBuffer WITH CudaHostAlloc
@@ -491,17 +491,17 @@ void TestGPU_MappedMemory(unsigned imax)
     int i;
 
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer pointer
-    tKeccakLane* d_outBuffer;  // device out buffer pointer
+    unsigned* d_inBuffer;   // device in buffer pointer
+    unsigned* d_outBuffer;  // device out buffer pointer
 
     // check device Prop
     struct cudaDeviceProp deviceProp;
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // Get properties and verify device 0 supports mapped memory
@@ -568,20 +568,20 @@ void TestCPU_2stg(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer size :  2*OUTPUT_BLOCK_SIZE_B * NB_SCND_STAGE_THREADS
     // * NB_THREADS_BLOCKS
-    h_outBuffer = (tKeccakLane*)malloc(
+    h_outBuffer = (unsigned*)malloc(
         2 * OUTPUT_BLOCK_SIZE_B * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
     memset(h_outBuffer, 0,
         2 * OUTPUT_BLOCK_SIZE_B * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
@@ -628,22 +628,22 @@ void TestGPU_2stg(unsigned imax)
     struct timespec t1, t2;
     unsigned int i;
 
-    tKeccakLane* h_inBuffer;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer;  // Host out buffer
+    unsigned* h_inBuffer;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // init host inBuffer
-    h_inBuffer = (tKeccakLane*)malloc(TOTAL_INPUT_SIZE);
+    h_inBuffer = (unsigned*)malloc(TOTAL_INPUT_SIZE);
     memset(h_inBuffer, 0, TOTAL_INPUT_SIZE);
 
     // init host outBuffer
-    h_outBuffer = (tKeccakLane*)malloc(
+    h_outBuffer = (unsigned*)malloc(
         2 * OUTPUT_BLOCK_SIZE_B * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
     memset(h_outBuffer, 0,
         2 * OUTPUT_BLOCK_SIZE_B * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
@@ -706,14 +706,14 @@ void TestGPU_2stg_Stream_OverlapCPU(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inBuffer = NULL;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer = NULL;  // Host out buffer
+    unsigned* h_inBuffer = NULL;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer = NULL;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Kstate[25];  // Keccak State for top node
-    memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+    unsigned Kstate[25];  // Keccak State for top node
+    memset(Kstate, 0, 25 * sizeof(unsigned));
 
 
     // alloc host inBuffer WITH CudaHostAlloc
@@ -798,11 +798,11 @@ void TestGPU_SCipher(unsigned imax)
     struct timespec t1, t2;
     int i;
 
-    tKeccakLane* h_inKeyNonce = NULL;  // Host in buffer for Key and Nonce
-    tKeccakLane* h_outBuffer = NULL;   // Host out buffer
+    unsigned* h_inKeyNonce = NULL;  // Host in buffer for Key and Nonce
+    unsigned* h_outBuffer = NULL;   // Host out buffer
 
-    tKeccakLane* d_inKeyNonce;  // device in buffer
-    tKeccakLane* d_outBuffer;   // device out buffer
+    unsigned* d_inKeyNonce;  // device in buffer
+    unsigned* d_outBuffer;   // device out buffer
 
 
     // alloc host inBuffer WITH CudaHostAlloc
@@ -872,16 +872,16 @@ void Test_Completness()
 {
     int i, res, ctr;
 
-    tKeccakLane* h_inBuffer = NULL;   // Host in buffer for data to be hashed
-    tKeccakLane* h_outBuffer = NULL;  // Host out buffer
+    unsigned* h_inBuffer = NULL;   // Host in buffer for data to be hashed
+    unsigned* h_outBuffer = NULL;  // Host out buffer
 
-    tKeccakLane* d_inBuffer;   // device in buffer
-    tKeccakLane* d_outBuffer;  // device out buffer
+    unsigned* d_inBuffer;   // device in buffer
+    unsigned* d_outBuffer;  // device out buffer
 
-    tKeccakLane Ks1[25];  // Keccak State for top node
-    tKeccakLane Ks2[25];  // Keccak State for top node
-    memset(Ks1, 0, 25 * sizeof(tKeccakLane));
-    memset(Ks2, 0, 25 * sizeof(tKeccakLane));
+    unsigned Ks1[25];  // Keccak State for top node
+    unsigned Ks2[25];  // Keccak State for top node
+    memset(Ks1, 0, 25 * sizeof(unsigned));
+    memset(Ks2, 0, 25 * sizeof(unsigned));
 
 
     // alloc host inBuffer WITH CudaHostAlloc

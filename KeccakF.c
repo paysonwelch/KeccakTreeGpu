@@ -8,14 +8,14 @@
 // Study constant memory best placement with Cuda (textures ?)
 
 
-const tKeccakLane KeccakF_RoundConstantsCPU[22] = {(tKeccakLane)0x00000001,
-    (tKeccakLane)0x00008082, (tKeccakLane)0x0000808a, (tKeccakLane)0x80008000,
-    (tKeccakLane)0x0000808b, (tKeccakLane)0x80000001, (tKeccakLane)0x80008081,
-    (tKeccakLane)0x00008009, (tKeccakLane)0x0000008a, (tKeccakLane)0x00000088,
-    (tKeccakLane)0x80008009, (tKeccakLane)0x8000000a, (tKeccakLane)0x8000808b,
-    (tKeccakLane)0x0000008b, (tKeccakLane)0x00008089, (tKeccakLane)0x00008003,
-    (tKeccakLane)0x00008002, (tKeccakLane)0x00000080, (tKeccakLane)0x0000800a,
-    (tKeccakLane)0x8000000a, (tKeccakLane)0x80008081, (tKeccakLane)0x00008080};
+const unsigned KeccakF_RoundConstantsCPU[22] = {(unsigned)0x00000001,
+    (unsigned)0x00008082, (unsigned)0x0000808a, (unsigned)0x80008000,
+    (unsigned)0x0000808b, (unsigned)0x80000001, (unsigned)0x80008081,
+    (unsigned)0x00008009, (unsigned)0x0000008a, (unsigned)0x00000088,
+    (unsigned)0x80008009, (unsigned)0x8000000a, (unsigned)0x8000808b,
+    (unsigned)0x0000008b, (unsigned)0x00008089, (unsigned)0x00008003,
+    (unsigned)0x00008002, (unsigned)0x00000080, (unsigned)0x0000800a,
+    (unsigned)0x8000000a, (unsigned)0x80008081, (unsigned)0x00008080};
 
 
 // INFO It could be more optimized to use unsigned char on an 8-bit CPU
@@ -33,11 +33,11 @@ const unsigned int KeccakF_PiLane[25] = {10, 7, 11, 17, 18, 3, 5, 16, 8, 21, 24,
 const unsigned int KeccakF_Mod5[10] = {0, 1, 2, 3, 4, 0, 1, 2, 3, 4};
 
 
-void KeccakF(tKeccakLane* state)
+void KeccakF(unsigned* state)
 {
     unsigned int x, y, round;  // try to avoid to many registers
-    tKeccakLane BC[5];
-    tKeccakLane temp;
+    unsigned BC[5];
+    unsigned temp;
 
     for (round = 0; round < cKeccakNumberOfRounds; ++round)
     {
@@ -87,11 +87,11 @@ void KeccakF(tKeccakLane* state)
     }
 }
 
-void KeccakF_CPU(tKeccakLane* state)
+void KeccakF_CPU(unsigned* state)
 {
     unsigned int round;  // try to avoid to many registers
-    tKeccakLane BC[5];
-    tKeccakLane temp;
+    unsigned BC[5];
+    unsigned temp;
 
     for (round = 0; round < cKeccakNumberOfRounds; ++round)
     {
@@ -274,7 +274,7 @@ void KeccakF_CPU(tKeccakLane* state)
 
 // Absorb blocks in top of tree keccak hash function
 // inBuffer supposed to have block_number * output_block_size of data
-void Keccak_top(tKeccakLane* Kstate, tKeccakLane* inBuffer, int block_number)
+void Keccak_top(unsigned* Kstate, unsigned* inBuffer, int block_number)
 {
     int ind_word, k;
 
@@ -298,7 +298,7 @@ void Keccak_top(tKeccakLane* Kstate, tKeccakLane* inBuffer, int block_number)
 // Functions on Keccak state (seroize, print, compare)
 //**************************
 
-void zeroize(tKeccakLane* Kstate)
+void zeroize(unsigned* Kstate)
 {
     int ind_word;
     for (ind_word = 0; ind_word < 25; ind_word++)
@@ -307,7 +307,7 @@ void zeroize(tKeccakLane* Kstate)
     }
 }
 
-void print_KS(tKeccakLane* Kstate)
+void print_KS(unsigned* Kstate)
 {
     unsigned int x, y;
 
@@ -324,7 +324,7 @@ void print_KS(tKeccakLane* Kstate)
 }
 
 // print first 256 bits : output of Keccak hash
-void print_KS_256(tKeccakLane* Kstate)
+void print_KS_256(unsigned* Kstate)
 {
     unsigned int x;
 
@@ -337,7 +337,7 @@ void print_KS_256(tKeccakLane* Kstate)
 
 
 // Test equality of Keccak States
-int isEqual_KS(tKeccakLane* Ks1, tKeccakLane* Ks2)
+int isEqual_KS(unsigned* Ks1, unsigned* Ks2)
 {
     unsigned int x, y;
     int res = 0;

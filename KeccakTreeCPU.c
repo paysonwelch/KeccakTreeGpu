@@ -5,7 +5,7 @@
 #include "KeccakF.h"
 #include "KeccakTreeCPU.h"
 
-void KeccakTreeCPU(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
+void KeccakTreeCPU(unsigned* inBuffer, unsigned* outBuffer)
 {
     // int thread_i,
     int thrIdx, blkIdx;
@@ -18,8 +18,8 @@ void KeccakTreeCPU(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
         for (thrIdx = 0; thrIdx < NB_THREADS; thrIdx++)  // loop on threads
                                                          // inside a threadblock
         {
-            tKeccakLane Kstate[25];
-            memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+            unsigned Kstate[25];
+            memset(Kstate, 0, 25 * sizeof(unsigned));
 
             for (k = 0; k < NB_INPUT_BLOCK; k++)
             {
@@ -56,7 +56,7 @@ void KeccakTreeCPU(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
 // Use output of 2x OUTPUT_BLOCK_SIZE_B size to respect conditions for soundness
 // of Treehashing
 
-void KeccakTreeCPU_2stg(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
+void KeccakTreeCPU_2stg(unsigned* inBuffer, unsigned* outBuffer)
 {
     // int thread_i,
     int thrIdx, blkIdx;
@@ -68,11 +68,10 @@ void KeccakTreeCPU_2stg(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
     {
         // Shared Buffer to store first stage hash output
         // shared memory will be used on GPU
-        tKeccakLane* SharedBuffer = NULL;
+        unsigned* SharedBuffer = NULL;
 
         // alloc and init to 0
-        SharedBuffer =
-            (tKeccakLane*)malloc(2 * OUTPUT_BLOCK_SIZE_B * NB_THREADS);
+        SharedBuffer = (unsigned*)malloc(2 * OUTPUT_BLOCK_SIZE_B * NB_THREADS);
         memset(SharedBuffer, 0, 2 * OUTPUT_BLOCK_SIZE_B * NB_THREADS);
 
         // printf("SharedBuffer malloc blkIdx : %d \n\n",blkIdx);
@@ -80,8 +79,8 @@ void KeccakTreeCPU_2stg(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
         for (thrIdx = 0; thrIdx < NB_THREADS; thrIdx++)  // loop on threads
                                                          // inside a threadblock
         {
-            tKeccakLane Kstate[25];
-            memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+            unsigned Kstate[25];
+            memset(Kstate, 0, 25 * sizeof(unsigned));
 
             for (k = 0; k < NB_INPUT_BLOCK; k++)
             {
@@ -128,8 +127,8 @@ void KeccakTreeCPU_2stg(tKeccakLane* inBuffer, tKeccakLane* outBuffer)
         for (thrIdx = 0; thrIdx < NB_SCND_STAGE_THREADS;
              thrIdx++)  // 2nd loop on threads inside a threadblock
         {
-            tKeccakLane Kstate[25];
-            memset(Kstate, 0, 25 * sizeof(tKeccakLane));
+            unsigned Kstate[25];
+            memset(Kstate, 0, 25 * sizeof(unsigned));
 
             // number of input block per thread is now NB_INPUT_BLOCK_SNCD_STAGE
             // = 2* NB_THREADS/ NB_SNCD_STAGE_THREADS

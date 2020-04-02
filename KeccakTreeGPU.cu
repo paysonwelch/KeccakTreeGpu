@@ -20,32 +20,32 @@ extern "C" __host__ void checkCUDAError(const char* msg)
 }
 
 // GPU constants
-__constant__ tKeccakLane KeccakF_RoundConstants[22] = {(tKeccakLane)0x00000001,
-    (tKeccakLane)0x00008082, (tKeccakLane)0x0000808a, (tKeccakLane)0x80008000,
-    (tKeccakLane)0x0000808b, (tKeccakLane)0x80000001, (tKeccakLane)0x80008081,
-    (tKeccakLane)0x00008009, (tKeccakLane)0x0000008a, (tKeccakLane)0x00000088,
-    (tKeccakLane)0x80008009, (tKeccakLane)0x8000000a, (tKeccakLane)0x8000808b,
-    (tKeccakLane)0x0000008b, (tKeccakLane)0x00008089, (tKeccakLane)0x00008003,
-    (tKeccakLane)0x00008002, (tKeccakLane)0x00000080, (tKeccakLane)0x0000800a,
-    (tKeccakLane)0x8000000a, (tKeccakLane)0x80008081, (tKeccakLane)0x00008080};
+__constant__ unsigned KeccakF_RoundConstants[22] = {(unsigned)0x00000001,
+    (unsigned)0x00008082, (unsigned)0x0000808a, (unsigned)0x80008000,
+    (unsigned)0x0000808b, (unsigned)0x80000001, (unsigned)0x80008081,
+    (unsigned)0x00008009, (unsigned)0x0000008a, (unsigned)0x00000088,
+    (unsigned)0x80008009, (unsigned)0x8000000a, (unsigned)0x8000808b,
+    (unsigned)0x0000008b, (unsigned)0x00008089, (unsigned)0x00008003,
+    (unsigned)0x00008002, (unsigned)0x00000080, (unsigned)0x0000800a,
+    (unsigned)0x8000000a, (unsigned)0x80008081, (unsigned)0x00008080};
 
 // host constants
-tKeccakLane KeccakF_RoundConstants_h[22] = {(tKeccakLane)0x00000001,
-    (tKeccakLane)0x00008082, (tKeccakLane)0x0000808a, (tKeccakLane)0x80008000,
-    (tKeccakLane)0x0000808b, (tKeccakLane)0x80000001, (tKeccakLane)0x80008081,
-    (tKeccakLane)0x00008009, (tKeccakLane)0x0000008a, (tKeccakLane)0x00000088,
-    (tKeccakLane)0x80008009, (tKeccakLane)0x8000000a, (tKeccakLane)0x8000808b,
-    (tKeccakLane)0x0000008b, (tKeccakLane)0x00008089, (tKeccakLane)0x00008003,
-    (tKeccakLane)0x00008002, (tKeccakLane)0x00000080, (tKeccakLane)0x0000800a,
-    (tKeccakLane)0x8000000a, (tKeccakLane)0x80008081, (tKeccakLane)0x00008080};
+unsigned KeccakF_RoundConstants_h[22] = {(unsigned)0x00000001,
+    (unsigned)0x00008082, (unsigned)0x0000808a, (unsigned)0x80008000,
+    (unsigned)0x0000808b, (unsigned)0x80000001, (unsigned)0x80008081,
+    (unsigned)0x00008009, (unsigned)0x0000008a, (unsigned)0x00000088,
+    (unsigned)0x80008009, (unsigned)0x8000000a, (unsigned)0x8000808b,
+    (unsigned)0x0000008b, (unsigned)0x00008089, (unsigned)0x00008003,
+    (unsigned)0x00008002, (unsigned)0x00000080, (unsigned)0x0000800a,
+    (unsigned)0x8000000a, (unsigned)0x80008081, (unsigned)0x00008080};
 
 // Device (GPU) Keccak-f function implementation
 // unrolled
-__device__ void KeccakFunr(tKeccakLane* state)
+__device__ void KeccakFunr(unsigned* state)
 {
     unsigned int round;  // try to avoid to many registers
-    tKeccakLane BC[5];
-    tKeccakLane temp;
+    unsigned BC[5];
+    unsigned temp;
 
     for (round = 0; round < cKeccakNumberOfRounds; ++round)
     {
@@ -228,11 +228,11 @@ __device__ void KeccakFunr(tKeccakLane* state)
 
 // Host Keccak-f function (pb with using the same constants between host and
 // device) unrolled
-__host__ void KeccakFunr_h(tKeccakLane* state)
+__host__ void KeccakFunr_h(unsigned* state)
 {
     unsigned int round;  // try to avoid to many registers
-    tKeccakLane BC[5];
-    tKeccakLane temp;
+    unsigned BC[5];
+    unsigned temp;
 
     for (round = 0; round < cKeccakNumberOfRounds; ++round)
     {
@@ -415,7 +415,7 @@ __host__ void KeccakFunr_h(tKeccakLane* state)
 
 // Keccak final node hashing results of previous nodes in sequential mode
 __host__ void Keccak_top_GPU(
-    tKeccakLane* Kstate, tKeccakLane* inBuffer, int block_number)
+    unsigned* Kstate, unsigned* inBuffer, int block_number)
 {
     int ind_word, k;
 
@@ -437,10 +437,10 @@ __host__ void Keccak_top_GPU(
 //************************************************************************
 // kernel implementaing hash function, hashing NB_INPUT_BLOCK (of 256 bits)
 //
-__global__ void ker_Keccak(tKeccakLane* d_inBuffer, tKeccakLane* d_outBuffer)
+__global__ void ker_Keccak(unsigned* d_inBuffer, unsigned* d_outBuffer)
 {
     int ind_word, k;
-    tKeccakLane Kstate[25];
+    unsigned Kstate[25];
 
     // zeroize the state
     for (ind_word = 0; ind_word < 25; ind_word++)
@@ -476,14 +476,12 @@ __global__ void ker_Keccak(tKeccakLane* d_inBuffer, tKeccakLane* d_outBuffer)
 //******************************************************
 // Implementing 2 stages treehash
 //******************************************************
-__global__ void ker_Keccak_2stg(
-    tKeccakLane* d_inBuffer, tKeccakLane* d_outBuffer)
+__global__ void ker_Keccak_2stg(unsigned* d_inBuffer, unsigned* d_outBuffer)
 {
     int ind_word, k;
-    tKeccakLane Kstate[25];
+    unsigned Kstate[25];
 
-    __shared__ tKeccakLane
-        SharedBuffer[2 * OUTPUT_BLOCK_SIZE_B / 4 * NB_THREADS];
+    __shared__ unsigned SharedBuffer[2 * OUTPUT_BLOCK_SIZE_B / 4 * NB_THREADS];
 
     // zeroize the state
     for (ind_word = 0; ind_word < 25; ind_word++)
@@ -584,14 +582,14 @@ __global__ void ker_Keccak_2stg(
 // d_KeyNonce_inBuffer must point to a 256 bits Key + 256 bits Nonce (random)
 //*************************
 __global__ void ker_Keccak_SCipher(
-    tKeccakLane* d_KeyNonce_inBuffer, tKeccakLane* d_outBuffer)
+    unsigned* d_KeyNonce_inBuffer, unsigned* d_outBuffer)
 {
     int ind_word, k;
-    tKeccakLane Kstate[25];
+    unsigned Kstate[25];
 
     // used shared memory to load only once the Key and Nonce
-    __shared__ tKeccakLane Key[8];    // 8 32b words for a secret key
-    __shared__ tKeccakLane Nonce[8];  //
+    __shared__ unsigned Key[8];    // 8 32b words for a secret key
+    __shared__ unsigned Nonce[8];  //
 
     // load Key and Nonce in shared mem assuming that NB_THREADS used will be >
     // 8
@@ -655,8 +653,8 @@ __global__ void ker_Keccak_SCipher(
 // data to be hashed is in h_inBuffer
 // output chaining values hashes are copied to h_outBuffer
 //************************
-extern "C" __host__ void KeccakTreeGPU(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer)
+extern "C" __host__ void KeccakTreeGPU(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer)
 {
     // copy host to device
     cudaMemcpy(d_inBuffer, h_inBuffer,
@@ -682,9 +680,9 @@ extern "C" __host__ void KeccakTreeGPU(tKeccakLane* h_inBuffer,
 //***********************************************************
 // Overlap GPU kernel computation and CPU top node computation
 //***********************************************************
-extern "C" __host__ void KeccakTreeGPU_overlapCPU(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer,
-    tKeccakLane* Kstate)
+extern "C" __host__ void KeccakTreeGPU_overlapCPU(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer,
+    unsigned* Kstate)
 {
     // copy input data host to device
     cudaMemcpy(d_inBuffer, h_inBuffer,
@@ -711,8 +709,8 @@ extern "C" __host__ void KeccakTreeGPU_overlapCPU(tKeccakLane* h_inBuffer,
 //***********************************************************
 // Split computation over NB_STREAMS several kernels
 //***********************************************************
-extern "C" __host__ void KeccakTreeGPU_Split(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer)
+extern "C" __host__ void KeccakTreeGPU_Split(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer)
 {
     unsigned int inOffset;
     unsigned int outOffset;
@@ -749,8 +747,8 @@ extern "C" __host__ void KeccakTreeGPU_Split(tKeccakLane* h_inBuffer,
 //***********************************************************
 // Split computation over several STREAMS
 //***********************************************************
-extern "C" __host__ void KeccakTreeGPU_Stream(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer)
+extern "C" __host__ void KeccakTreeGPU_Stream(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer)
 {
     unsigned int inOffset;
     unsigned int outOffset;
@@ -803,9 +801,9 @@ extern "C" __host__ void KeccakTreeGPU_Stream(tKeccakLane* h_inBuffer,
 //***********************************************************
 // Split computation over several Cuda STREAMS, and overlap with CPU
 //***********************************************************
-extern "C" __host__ void KeccakTreeGPU_Stream_OverlapCPU(
-    tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer,
-    tKeccakLane* d_outBuffer, tKeccakLane* Kstate)
+extern "C" __host__ void KeccakTreeGPU_Stream_OverlapCPU(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer,
+    unsigned* Kstate)
 {
     unsigned int inOffset;
     unsigned int outOffset;
@@ -864,8 +862,8 @@ extern "C" __host__ void KeccakTreeGPU_Stream_OverlapCPU(
 // 2 stages Stage
 //******************************************************
 
-extern "C" __host__ void KeccakTreeGPU_2stg(tKeccakLane* h_inBuffer,
-    tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer, tKeccakLane* d_outBuffer)
+extern "C" __host__ void KeccakTreeGPU_2stg(unsigned* h_inBuffer,
+    unsigned* d_inBuffer, unsigned* h_outBuffer, unsigned* d_outBuffer)
 {
     // copy host to device
     cudaMemcpy(d_inBuffer, h_inBuffer,
@@ -893,8 +891,8 @@ extern "C" __host__ void KeccakTreeGPU_2stg(tKeccakLane* h_inBuffer,
 // 2 stages +  Split computation over several Cuda STREAMS, and overlap with CPU
 //***********************************************************
 extern "C" __host__ void KeccakTreeGPU_2stg_Stream_OverlapCPU(
-    tKeccakLane* h_inBuffer, tKeccakLane* d_inBuffer, tKeccakLane* h_outBuffer,
-    tKeccakLane* d_outBuffer, tKeccakLane* Kstate)
+    unsigned* h_inBuffer, unsigned* d_inBuffer, unsigned* h_outBuffer,
+    unsigned* d_outBuffer, unsigned* Kstate)
 {
     unsigned int inOffset;
     unsigned int outOffset;
@@ -952,9 +950,8 @@ extern "C" __host__ void KeccakTreeGPU_2stg_Stream_OverlapCPU(
 //***********************************************************
 // Keccak in StreamCipher Mode  (Using Cuda Streams)
 //***********************************************************
-extern "C" __host__ void KeccakSCipherGPU_Stream(tKeccakLane* h_inKeyNonce,
-    tKeccakLane* d_inKeyNonce, tKeccakLane* h_outBuffer,
-    tKeccakLane* d_outBuffer)
+extern "C" __host__ void KeccakSCipherGPU_Stream(unsigned* h_inKeyNonce,
+    unsigned* d_inKeyNonce, unsigned* h_outBuffer, unsigned* d_outBuffer)
 {
     unsigned int outOffset;
     int s;
