@@ -11,9 +11,10 @@ CUFLAGS = \
 	-O3 \
 	-gencode arch=compute_61,code=sm_61 \
 	-gencode arch=compute_53,code=sm_53 \
+	-gencode arch=compute_30,code=sm_30 \
 	--ptxas-options=-v
-LDFLAGS	= $(OFLAGS) -Wl,--gc-sections -Wl,-Map,$(BIN).map -L/usr/local/cuda/lib -L/usr/local/cuda-10.0/lib64
-LDFLAGS	+= -lcuda -lcudart
+LDFLAGS	= $(OFLAGS) -Wl,--gc-sections -Wl,-Map,$(BIN).map -L/usr/local/cuda/lib -L/usr/local/cuda-10.0/lib64 -L/usr/local/cuda/targets/x86_64-linux/lib
+LDFLAGS	+= -lcudart
 
 SRC	= $(wildcard *.c)
 SRCU	= $(wildcard *.cu)
