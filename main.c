@@ -1,20 +1,12 @@
-/*
-GPU Implementation of Keccak by Guillaume Sevestre, 2010
-
-This code is hereby put in the public domain.
-It is given as is, without any guarantee.
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <time.h>
 
-//Cuda
+// Cuda
 #include <cuda.h>
 #include <cuda_runtime.h>
-
 
 
 #include "KeccakF.h"
@@ -22,47 +14,26 @@ It is given as is, without any guarantee.
 #include "KeccakTreeGPU.h"
 #include "Test.h"
 
+#define IMAX \
+    1600  // 2400 // 1600 for high speed mesures // iteration for speed mesure
+          // loops
 
-
-
-
-int main()
+int main(int argc, char** argv)
 {
-   
-	
+    unsigned imax = IMAX;
+    if (argc >= 2)
+        imax = atoi(argv[1]);
+    Device_Info();
 
-	Device_Info();
+    Print_Param(imax);
 
-	Print_Param();
+    TestCPU_2stg(imax);
 
-	//Test_Completness();
+    TestGPU_2stg(imax);
 
-	/*
-	TestCPU(1);
-	
-	TestGPU();
+    TestGPU_2stg_Stream_OverlapCPU(imax);
 
-	TestGPU_OverlapCPU();
-
-	//TestGPU_Split();
-
-	TestGPU_Stream();
-
-	TestGPU_Stream_OverlapCPU();
-	*/
-	
-	
-
-	TestCPU_2stg(80);
-
-	TestGPU_2stg();
-
-	TestGPU_2stg_Stream_OverlapCPU();
-
-	
-
-	TestGPU_SCipher();
-	
+    TestGPU_SCipher(imax);
 
     return 0;
 }

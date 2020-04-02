@@ -1,65 +1,59 @@
-/*
-GPU Implementation of Keccak by Guillaume Sevestre, 2010
-
-This code is hereby put in the public domain.
-It is given as is, without any guarantee.
-*/
-
-#ifndef TEST_H_INCLUDED
-#define TEST_H_INCLUDED
+#pragma once
 
 //********************
 // Basic treehash mode
 //********************
 
-//test Tree hash mode 1 in CPU only
-//integer in argument is to lower the workload for CPU only test (slower than GPU tests)
-void TestCPU(int);
+// test Tree hash mode 1 in CPU only
+// integer in argument is to lower the workload for CPU only test (slower than
+// GPU tests)
+void TestCPU(unsigned);
 
-//Test Tree hash mode 1 with GPU and CPU
-void TestGPU(void);
+// Test Tree hash mode 1 with GPU and CPU
+void TestGPU(unsigned);
 
-//Test Tree hash mode 1 , GPU and CPU, CPU computation overlapped with GPU computation
-void TestGPU_OverlapCPU(void);
+// Test Tree hash mode 1 , GPU and CPU, CPU computation overlapped with GPU
+// computation
+void TestGPU_OverlapCPU(unsigned);
 
 
-void TestGPU_Split(void);
+void TestGPU_Split(unsigned);
 
-//Test Tree hash mode 1 , GPU and CPU, GPU computation is overlapped with memory transfers (Host to device) 
-void TestGPU_Stream(void);
+// Test Tree hash mode 1 , GPU and CPU, GPU computation is overlapped with
+// memory transfers (Host to device)
+void TestGPU_Stream(unsigned);
 
-//Test Tree hash mode 1 , GPU and CPU, GPU computation is overlapped with memory transfers , and with CPU computation
-void TestGPU_Stream_OverlapCPU(void);
+// Test Tree hash mode 1 , GPU and CPU, GPU computation is overlapped with
+// memory transfers , and with CPU computation
+void TestGPU_Stream_OverlapCPU(unsigned);
 
-//use of mapped memory : untested, unsupported by authors hardware
-void TestGPU_MappedMemory(void);
+// use of mapped memory : untested, unsupported by authors hardware
+void TestGPU_MappedMemory(unsigned);
 
 //*************
-//2 stages hash
+// 2 stages hash
 //*************
-void TestCPU_2stg(int);
+void TestCPU_2stg(unsigned);
 
-void TestGPU_2stg(void);
+void TestGPU_2stg(unsigned);
 
-void TestGPU_2stg_Stream_OverlapCPU(void);
+void TestGPU_2stg_Stream_OverlapCPU(unsigned);
 
 
 //***************************
-//Keccak in StreamCipher mode
+// Keccak in StreamCipher mode
 //***************************
-void TestGPU_SCipher(void);
+void TestGPU_SCipher(unsigned);
 
 
 // Other function
 
-//Empirically Test if all words in input data are taken into the hash function
+// Empirically Test if all words in input data are taken into the hash function
 void Test_Completness(void);
 
 
-//print GPU device info
+// print GPU device info
 void Device_Info(void);
 
-//print Tree hash mode params set in KeccakTree.h
-void Print_Param(void);
-
-#endif // TEST_H_INCLUDED
+// print Tree hash mode params set in KeccakTree.h
+void Print_Param(unsigned);
