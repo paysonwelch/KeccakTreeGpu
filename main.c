@@ -23,6 +23,8 @@ int main(int argc, char** argv)
     unsigned imax = IMAX;
     if (argc >= 2)
         imax = atoi(argv[1]);
+    seed = time(NULL);
+
     Device_Info();
 
     Print_Param(imax);

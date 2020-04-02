@@ -15,15 +15,7 @@
 
 #include "Test.h"
 
-// debug print function
-void print_out(unsigned* h_outBuffer, int nb_threads)
-{
-    printf("%08x ", h_outBuffer[0]);
-    printf("%08x ", h_outBuffer[1]);
-    printf("%08x ", h_outBuffer[nb_threads]);
-    printf("%08x ", h_outBuffer[nb_threads + 1]);
-    printf("\n\n");
-}
+unsigned char seed;
 
 static unsigned long long nano(struct timespec* t)
 {
@@ -66,7 +58,7 @@ void TestCPU(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
 
@@ -77,9 +69,6 @@ void TestCPU(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeCPU(h_inBuffer, h_outBuffer);
-
-        // print_out(h_outBuffer,NB_THREADS);
-
         Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
     }
     clock_gettime(CLOCK_REALTIME, &t2);
@@ -135,7 +124,7 @@ void TestGPU(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -145,10 +134,7 @@ void TestGPU(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeGPU(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
-
         Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
-        // print_KS_256(Kstate);
     }
 
     clock_gettime(CLOCK_REALTIME, &t2);
@@ -208,7 +194,7 @@ void TestGPU_OverlapCPU(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
 
@@ -221,18 +207,11 @@ void TestGPU_OverlapCPU(unsigned imax)
     // first iteration
     KeccakTreeGPU(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
 
-    // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
-    // print_KS_256(Kstate);
-
-
     // other iteration overlapping GPU computation with CPU
     for (i = 1; i < imax; i++)
     {
         KeccakTreeGPU_overlapCPU(
             h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer, Kstate);
-
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
-        // print_KS_256(Kstate);
     }
     // last output block on CPU
     Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
@@ -292,7 +271,7 @@ void TestGPU_Split(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -301,10 +280,7 @@ void TestGPU_Split(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeGPU_Split(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
-
         Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
-        // print_KS_256(Kstate);
     }
 
     clock_gettime(CLOCK_REALTIME, &t2);
@@ -368,7 +344,7 @@ void TestGPU_Stream(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -378,10 +354,7 @@ void TestGPU_Stream(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeGPU_Stream(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
-
         Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
-        // print_KS_256(Kstate);
     }
 
     clock_gettime(CLOCK_REALTIME, &t2);
@@ -446,7 +419,7 @@ void TestGPU_Stream_OverlapCPU(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -461,7 +434,6 @@ void TestGPU_Stream_OverlapCPU(unsigned imax)
     {
         KeccakTreeGPU_Stream_OverlapCPU(
             h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer, Kstate);
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
     }
     // last CPU computation
     Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
@@ -544,8 +516,6 @@ void TestGPU_MappedMemory(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeGPU(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
-        // print_out(h_outBuffer,NB_THREADS);
-
         Keccak_top(Kstate, h_outBuffer, NB_THREADS * NB_THREADS_BLOCKS);
     }
 
@@ -592,7 +562,7 @@ void TestCPU_2stg(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
 
@@ -603,9 +573,6 @@ void TestCPU_2stg(unsigned imax)
     for (i = 0; i < (imax); i++)
     {
         KeccakTreeCPU_2stg(h_inBuffer, h_outBuffer);
-
-        // print_out(h_outBuffer,2* NB_SCND_STAGE_THREADS* NB_THREADS_BLOCKS);
-
         Keccak_top(
             Kstate, h_outBuffer, 2 * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
     }
@@ -668,7 +635,7 @@ void TestGPU_2stg(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -678,9 +645,6 @@ void TestGPU_2stg(unsigned imax)
     for (i = 0; i < imax; i++)
     {
         KeccakTreeGPU_2stg(h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer);
-
-        // print_out(h_outBuffer,2* NB_SCND_STAGE_THREADS* NB_THREADS_BLOCKS);
-
         Keccak_top(
             Kstate, h_outBuffer, 2 * NB_SCND_STAGE_THREADS * NB_THREADS_BLOCKS);
     }
@@ -751,7 +715,7 @@ void TestGPU_2stg_Stream_OverlapCPU(unsigned imax)
                         NB_THREADS_BLOCKS;
          i++)
     {
-        h_inBuffer[i] = i;
+        h_inBuffer[i] = i + seed;
     }
 
     // GPU computation *******************************
@@ -766,7 +730,6 @@ void TestGPU_2stg_Stream_OverlapCPU(unsigned imax)
     {
         KeccakTreeGPU_2stg_Stream_OverlapCPU(
             h_inBuffer, d_inBuffer, h_outBuffer, d_outBuffer, Kstate);
-        // print_out(h_outBuffer,NB_THREADS*NB_THREADS_BLOCKS);
     }
     // last CPU computation
     Keccak_top(
@@ -849,12 +812,15 @@ void TestGPU_SCipher(unsigned imax)
 
     clock_gettime(CLOCK_REALTIME, &t2);
 
-    print_out(
-        h_outBuffer, NB_THREADS * SC_NB_OUTPUT_BLOCK * OUTPUT_BLOCK_SIZE_B / 4);
-
+    unsigned nb_threads =
+        NB_THREADS * SC_NB_OUTPUT_BLOCK * OUTPUT_BLOCK_SIZE_B / 4;
+    printf("%08x ", h_outBuffer[0]);
+    printf("%08x ", h_outBuffer[1]);
+    printf("%08x ", h_outBuffer[nb_threads]);
+    printf("%08x ", h_outBuffer[nb_threads + 1]);
+    printf("\n\n");
 
     printf("GPU SCipher speed : %.2f mB/s \n\n", speed1(&t1, &t2, imax));
-
 
     // free all buffer host and device
     cudaFreeHost(h_inKeyNonce);

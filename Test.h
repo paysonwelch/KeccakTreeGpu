@@ -1,5 +1,7 @@
 #pragma once
 
+extern unsigned char seed;
+
 //********************
 // Basic treehash mode
 //********************
