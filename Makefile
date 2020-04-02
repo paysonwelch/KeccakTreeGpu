@@ -9,15 +9,7 @@ OFLAGS	= -O3 -flto
 CFLAGS	= $(OFLAGS) -Wall -fdata-sections -ffunction-sections -I/usr/local/cuda/include
 CUFLAGS = \
 	-O3 \
-	-gencode arch=compute_35,code=sm_35 \
-	-gencode arch=compute_50,code=sm_50 \
-	-gencode arch=compute_52,code=sm_52 \
 	-gencode arch=compute_53,code=sm_53 \
-	-gencode arch=compute_60,code=sm_60 \
-	-gencode arch=compute_61,code=sm_61 \
-	-gencode arch=compute_62,code=sm_62 \
-	-gencode arch=compute_70,code=sm_70 \
-	-gencode arch=compute_75,code=sm_75 \
 	--ptxas-options=-v
 LDFLAGS	= $(OFLAGS) -Wl,--gc-sections -Wl,-Map,$(BIN).map -L/usr/local/cuda/lib -L/usr/local/cuda-10.0/targets/aarch64-linux/lib
 LDFLAGS	+= -lcuda -lcudart

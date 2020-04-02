@@ -838,7 +838,7 @@ void TestGPU_SCipher(unsigned imax)
     checkCUDAError(" cudaMemset d_outBuffer");
 
     // GPU computation *******************************
-    printf("GPU SCipher  speed test started\n");
+    printf("GPU SCipher speed test started\n");
 
     clock_gettime(CLOCK_REALTIME, &t1);
     for (i = 0; i < imax; i++)
