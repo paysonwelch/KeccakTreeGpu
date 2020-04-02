@@ -10,6 +10,7 @@ CFLAGS	= $(OFLAGS) -Wall -fdata-sections -ffunction-sections -I/usr/local/cuda/i
 CUFLAGS = \
 	-O3 \
 	-gencode arch=compute_61,code=sm_61 \
+	-gencode arch=compute_53,code=sm_53 \
 	--ptxas-options=-v
 LDFLAGS	= $(OFLAGS) -Wl,--gc-sections -Wl,-Map,$(BIN).map -L/usr/local/cuda/lib -L/usr/local/cuda-10.0/lib64
 LDFLAGS	+= -lcuda -lcudart
